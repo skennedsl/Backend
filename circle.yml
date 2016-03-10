@@ -9,8 +9,8 @@ dependencies:
 
 test:
   pre:
-    - cd ./source/backend && docker-compose pull
-    - cd ./source/backend && PG_PASS=testpass docker-compose up -d
+    - docker-compose pull
+    - PG_PASS=testpass docker-compose up -d
   override:
     - ./circleci-test.sh
 
