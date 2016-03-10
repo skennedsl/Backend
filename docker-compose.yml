@@ -5,7 +5,7 @@ postgres:
   environment:
    - POSTGRES_PASSWORD=${PG_PASS}
    - PGDATA=/data/main
-web:
+django:
   build: .
   dockerfile: ./docker/django/Dockerfile
   ports:
