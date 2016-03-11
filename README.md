@@ -59,5 +59,5 @@ PG_PASS=somepass DEBUG=1 docker-compose -f ./docker-compose_LOCAL.yml up -d
 If you make a change to a django setting, you will need to restart the service:
 
 ```
-docker-compose restart web
+docker-compose restart django
 ```
