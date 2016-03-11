@@ -7,6 +7,7 @@ postgres:
    - PGDATA=/data/main
 django:
   build: .
+  image: tams/django
   dockerfile: ./docker/django/Dockerfile
   ports:
    - "80:80"
