@@ -8,7 +8,6 @@ postgres:
 django:
   build: .
   dockerfile: ./docker/django/Dockerfile
-  image: tams/django
   ports:
    - "80:80"
   volumes:
