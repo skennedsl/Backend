@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'geoposition',
     'website',
     'api',
 )
@@ -60,10 +61,17 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
+try:
+    DB_HOST = os.environ['PG_HOST']
+except KeyError:
+    DB_HOST = 'postgres'
 
-DB_HOST = 'postgres'
+try:
+    DB_PORT = os.environ['PG_PORT']
+except KeyError:
+    DB_PORT = 5432
+
 DB_NAME = 'postgres'
-DB_PORT = 5432
 DB_USER = 'postgres'
 DB_PASS = os.environ['PG_PASS']
 
@@ -91,6 +99,20 @@ USE_L10N = True
 
 USE_TZ = True
 
+#for geoposition
+GEOPOSITION_MAP_OPTIONS = {
+    'minZoom': 3,
+    'center_on_current':True,
+    'scrollwheel':True,
+    'zoom':13,
+    'center': {'lat': 38.5815719, 'lng': -121.49439960000001},
+}
+
+GEOPOSITION_MARKER_OPTIONS = {
+    'cursor': 'move',
+    'position_on_current':True,
+    'position': {'lat': 38.5815719, 'lng': -121.49439960000001},
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/

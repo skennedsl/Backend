@@ -21,6 +21,9 @@ RUN apt-get install -qy postgresql-client
 # for Pillow pip installation
 RUN apt-get install -qy libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev
 
+# For GEODJANGO
+RUN apt-get install -qy libgeos-dev
+
 RUN easy_install pip
 RUN pip install uwsgi
 

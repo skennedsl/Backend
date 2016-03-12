@@ -1,3 +1,5 @@
+[![Circle CI](https://circleci.com/gh/ScribblesProject/Backend.svg?style=svg)](https://circleci.com/gh/ScribblesProject/Backend)
+
 # Installation
 
 1. Install Docker and Docker-compose
@@ -48,16 +50,21 @@ PG_PASS=somepass DEBUG=1 docker-compose up -d
 
 ## Running Locally
 
-When doing development, it kind of sucks to have to rebuild every time something changes. Use the LOCAL docker-compose file to force the docker contianer to use the same file system as the current directory. This way any changes made will update the server automatically (unless its a change to settings.py).
+**Requirements:**
+- pip
+- Docker
 
-To run the alternative docker-compose:
-
-```
-PG_PASS=somepass DEBUG=1 docker-compose -f ./docker-compose_LOCAL.yml up -d
-```
-
-If you make a change to a django setting, you will need to restart the service:
+**Running:**
 
 ```
-docker-compose restart django
+sudo ./run-local.sh
 ```
+
+To access, visit `http://localhost:8000`
+
+**What is this thing doing?**
+
+1. Installs and creates a virtualenv - a virtual environment for pip installations. This is so I dont mess with any pip stuff you have currently on your system.
+2. Runs a postgres container on port 5432 - Creates a volume, `persistant/`, to store the data
+3. Migrates the database
+4. Runs a django development server - This allows for files to be modified while the server is running
