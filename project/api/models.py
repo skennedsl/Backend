@@ -56,3 +56,5 @@ class Media(models.Model):
 
 	def thumbnail(self):
 		return '<img width="200" src="%s"/>' % self.image.url
+
+		
