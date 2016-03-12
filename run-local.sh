@@ -11,7 +11,7 @@ sudo pip install virtualenv || exit 1;
 virtualenv env
 source env/bin/activate
 
-if [ -d "`pwd`/persistant/postgresdata-$PG_VERSION" ]; then
+if [ -d "persistant/postgresdata-$PG_VERSION" ]; then
 	DB_EXISTS=1
 fi
 
@@ -27,9 +27,9 @@ docker rm postgres_local
 
 echo " "
 echo "Starting Postgres"
-PG_REPO=mdillon/postgis
+PG_REPO=postgres
 docker pull $PG_REPO:$PG_VERSION || exit 1;
-docker run -v "`pwd`/persistant/postgresdata-$PG_VERSION":"/data" -p 5432:5432 -e POSTGRES_PASSWORD=$PG_PASS -e PGDATA=/data/main -d --name postgres_local $PG_REPO:$PG_VERSION
+docker run -v "/persistant/postgresdata-$PG_VERSION":"/data" -p 5432:5432 -e POSTGRES_PASSWORD=$PG_PASS -e PGDATA=/data/main -d --name postgres_local $PG_REPO:$PG_VERSION
 
 echo " "
 echo "Waiting for postgres to start (15 sec)"
