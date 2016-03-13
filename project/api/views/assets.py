@@ -85,7 +85,7 @@ class AssetList(ViewRequestDispatcher):
 			# Compile info and append
 			result['assets'].append(assemble_asset_info(obj))
 
-		return HttpResponse(json.dumps(result), content_type="application/json")
+		return HttpResponse(self.json_dump(request, result), content_type="application/json")
 
 
 class AssetFetch(ViewRequestDispatcher):
@@ -117,7 +117,7 @@ class AssetFetch(ViewRequestDispatcher):
 		# Compile asset info
 		result = assemble_asset_info(asset_obj)
 
-		return HttpResponse(json.dumps(result), content_type="application/json")
+		return HttpResponse(self.json_dump(request, result), content_type="application/json")
 
 
 class AssetDelete(ViewRequestDispatcher):
@@ -143,7 +143,7 @@ class AssetDelete(ViewRequestDispatcher):
 		if num_deleted > 0:
 			result['success'] = True
 
-		return HttpResponse(json.dumps(result), content_type="application/json")
+		return HttpResponse(self.json_dump(request, result), content_type="application/json")
 
 
 class AssetUpdate(ViewRequestDispatcher):
@@ -230,7 +230,7 @@ class AssetUpdate(ViewRequestDispatcher):
 
 		asset_obj.save()
 
-		return HttpResponse(json.dumps({'success':True}), content_type="application/json")
+		return HttpResponse(self.json_dump(request, {'success':True}), content_type="application/json")
 
 
 class AssetCreate(ViewRequestDispatcher):
@@ -310,5 +310,5 @@ class AssetCreate(ViewRequestDispatcher):
 			new_type.save()
 			new_asset.asset_type = new_type
 
-		return HttpResponse(json.dumps({'success':True}), content_type="application/json")
+		return HttpResponse(self.json_dump(request, {'success':True}), content_type="application/json")
 

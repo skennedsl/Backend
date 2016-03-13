@@ -1,5 +1,4 @@
-[![Circle CI](https://circleci.com/gh/ScribblesProject/Backend.svg?style=svg)](https://circleci.com/gh/ScribblesProject/Backend)
-
+CircleCI - [![Circle CI](https://circleci.com/gh/ScribblesProject/Backend.svg?style=svg)](https://circleci.com/gh/ScribblesProject/Backend)
 # Installation
 
 1. Install Docker and Docker-compose
