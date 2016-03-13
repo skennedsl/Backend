@@ -1,9 +1,10 @@
 from django.http import HttpResponse
 from django.views.generic import View
 import json
+from dispatcher import ViewRequestDispatcher
 
 
-class Status(View):
+class Status(ViewRequestDispatcher):
     def get(self, request):
 		"""Registers a new user.
 

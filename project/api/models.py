@@ -13,7 +13,7 @@ def validate_file_extension(value):
 
 
 class Category(models.Model):
-	name = models.CharField(max_length=255)
+	name = models.CharField(max_length=255, unique=True)
 	description = models.CharField(max_length=255)
 
 	# How its displayed when printed
@@ -22,7 +22,7 @@ class Category(models.Model):
 
 
 class Type(models.Model):
-	name = models.CharField(max_length=255)
+	name = models.CharField(max_length=255, unique=True)
 
 	# How its displayed when printed
 	def __unicode__(self):
