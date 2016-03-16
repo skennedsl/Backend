@@ -1,12 +1,8 @@
-import os
 import json
-
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.views.generic import View
 from django.utils.decorators import method_decorator
-
-from project.settings import DEBUG
 from api.common.errors import ApplicationException, GeneralException
 
 
@@ -23,7 +19,7 @@ class ViewRequestDispatcher(View):
         except ApplicationException as ae:
             return self.handle_exception(ae, request)
 
-        #except Exception as e:
+        # except Exception as e:
         #    return self.handle_exception(GeneralException(e), request)
 
     def handle_exception(self, e, request):

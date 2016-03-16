@@ -1,24 +1,22 @@
 from django.http import HttpResponse
-from django.views.generic import View
-import json
 from dispatcher import ViewRequestDispatcher
 
 
 class Status(ViewRequestDispatcher):
     def get(self, request):
-		"""Registers a new user.
+        """Registers a new user.
 
-		Endpoint:           /companion/user/register/
-		HTTP method:        POST
-		HTTP headers:       <none>
-		Query string:       <none> 
+        Endpoint:           /companion/user/register/
+        HTTP method:        POST
+        HTTP headers:       <none>
+        Query string:       <none> 
 
-		Response:
-		{
-			"status": string
-		}
-		"""
-		response_data = {
-		    'status':"success",
-		}
-		return HttpResponse(self.json_dump(request, response_data), content_type="application/json")
+        Response:
+        {
+            "status": string
+        }
+        """
+        response_data = {
+            'status': "success",
+        }
+        return HttpResponse(self.json_dump(request, response_data), content_type="application/json")
