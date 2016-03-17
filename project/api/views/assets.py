@@ -134,12 +134,11 @@ class AssetDelete(ViewRequestDispatcher):
         }
         """
 
-        num_deleted = Asset.objects.get(id=asset_id).delete()
-
-        result = {'success': False}
-
-        if num_deleted > 0:
-            result['success'] = True
+        result = {'success': True}
+        try:
+            Asset.objects.get(id=asset_id).delete()
+        except:
+            result['success'] = False            
 
         return HttpResponse(self.json_dump(request, result), content_type="application/json")
 
