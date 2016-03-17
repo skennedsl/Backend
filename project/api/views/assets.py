@@ -232,10 +232,10 @@ class AssetUpdate(ViewRequestDispatcher):
 
 
 class AssetCreate(ViewRequestDispatcher):
-    def post(self, request, asset_id):
+    def post(self, request):
         """Create an asset
 
-        Endpoint:       /api/asset/create/<asset_id>/
+        Endpoint:       /api/asset/create/
         HTTP method:    POST
         HTTP headers:   <none>
         Query string:   <none>
@@ -256,10 +256,6 @@ class AssetCreate(ViewRequestDispatcher):
             'success': Boolean
         }
         """
-
-        # Raise exception if asset exists
-        if len(Asset.objects.filter(id=asset_id)) > 0:
-            raise InvalidFieldException('Asset already exists')
 
         try:
             data = json.loads(request.body)
