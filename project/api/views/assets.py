@@ -244,7 +244,7 @@ class AssetCreate(ViewRequestDispatcher):
         Request body: {
             'name':                 String
             'description':          String
-            'category-name':        String  # If category doesnt exist, it will be created
+            'category':             String  # If category doesnt exist, it will be created
             'category-description': String
             'type-name':            string  # If type doesnt exist, it will be created
             'latitude':             Double
@@ -262,22 +262,13 @@ class AssetCreate(ViewRequestDispatcher):
             name = data['name']
             description = data['description']
             categ = data['category']
-            categ_description = data['categ_description']
-            asset_t = data['asset-type']
+            categ_description = data['category-description']
+            asset_t = data['type-name']
             latitude = data['latitude']
             longitude = data['longitude']
         except KeyError:
             raise InvalidFieldException('Body not formatted correctly')
 
-        new_asset = Asset.objects.create(name=name)
-
-        # Add Name & Description
-        new_asset.name = name
-        new_asset.description = description
-
-        # Add Possition
-        new_location = Location.objects.create(position=Geoposition(latitude, longitude), asset=new_asset)
-        new_location.save()
 
         # AssetCategory
         try:
@@ -285,23 +276,26 @@ class AssetCreate(ViewRequestDispatcher):
             new_categ = Category.objects.get(name=categ)
             new_categ.description = categ_description
             new_categ.save()
-            new_asset.category = new_categ
         except Category.DoesNotExist:
             # If D.N.E, create and replace
-            new_categ = Category.objects.get(name=categ, description=categ_description)
+            new_categ = Category.objects.create(name=categ, description=categ_description)
             new_categ.save()
-            new_asset.category = new_categ
 
         # AssetType
         try:
             # If exists, update and replace
             new_type = Type.objects.get(name=asset_t)
             new_type.save()
-            new_asset.asset_type = new_type
         except Type.DoesNotExist:
             # If D.N.E, create and replace
-            new_type = Type.objects.get(name=asset_t)
+            new_type = Type.objects.create(name=asset_t)
             new_type.save()
-            new_asset.asset_type = new_type
+
+
+        new_asset = Asset.objects.create(name=name, description=description, category=new_categ, asset_type=new_type)
+
+        # Add Possition
+        new_location = Location.objects.create(position=Geoposition(latitude, longitude), asset=new_asset)
+        new_location.save()
 
         return HttpResponse(self.json_dump(request, {'success': True}), content_type="application/json")
