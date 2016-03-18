@@ -24,6 +24,7 @@ def assemble_asset_info(asset_obj):
         'name': asset_obj.name,
         'description': asset_obj.description,
         'category': asset_obj.category.name,
+        'category-description': asset_obj.category.description,
         'asset-type': asset_obj.asset_type.name,
         'latitude': 0.0,
         'longitude': 0.0,
