@@ -41,8 +41,10 @@ def assemble_asset_info(asset_obj):
     # Get asset media
     medias = Media.objects.filter(asset=asset_obj)
     if len(medias) > 0:
-        result['media-image-url'] = medias[0].image.url
-        result['media-voice-url'] = medias[0].voice_memo.url
+        if medias[0].image:
+            result['media-image-url'] = medias[0].image.url
+        if medias[0].voice_memo:
+            result['media-voice-url'] = medias[0].voice_memo.url
 
     return result
 
@@ -253,6 +255,7 @@ class AssetCreate(ViewRequestDispatcher):
 
         Response:
         {
+            'id': Int
             'success': Boolean
         }
         """
@@ -269,6 +272,7 @@ class AssetCreate(ViewRequestDispatcher):
         except KeyError:
             raise InvalidFieldException('Body not formatted correctly')
 
+        result = {'success': True}
 
         # AssetCategory
         try:
@@ -291,11 +295,12 @@ class AssetCreate(ViewRequestDispatcher):
             new_type = Type.objects.create(name=asset_t)
             new_type.save()
 
-
         new_asset = Asset.objects.create(name=name, description=description, category=new_categ, asset_type=new_type)
+        new_asset.save()
+        result['id'] = new_asset.id
 
         # Add Possition
         new_location = Location.objects.create(position=Geoposition(latitude, longitude), asset=new_asset)
         new_location.save()
 
-        return HttpResponse(self.json_dump(request, {'success': True}), content_type="application/json")
+        return HttpResponse(self.json_dump(request, result), content_type="application/json")

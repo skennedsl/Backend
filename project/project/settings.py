@@ -121,5 +121,9 @@ STATIC_ROOT = "/opt/Project/volatile/static/"
 STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
-MEDIA_ROOT = '/opt/Project/persistent/media/'
+try:
+    MEDIA_ROOT = os.environ['MEDIA_ROOT']
+except:
+    MEDIA_ROOT = '/opt/Project/persistent/media/'
+    
 MEDIA_URL = '/media/'

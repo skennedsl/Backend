@@ -29,7 +29,7 @@ echo " "
 echo "Starting Postgres"
 PG_REPO=postgres
 docker pull $PG_REPO:$PG_VERSION || exit 1;
-docker run -v "/persistant/postgresdata-$PG_VERSION":"/data" -p 5432:5432 -e POSTGRES_PASSWORD=$PG_PASS -e PGDATA=/data/main -d --name postgres_local $PG_REPO:$PG_VERSION
+docker run -p 5432:5432 -e POSTGRES_PASSWORD=$PG_PASS -d --name postgres_local $PG_REPO:$PG_VERSION
 
 echo " "
 echo "Waiting for postgres to start (15 sec)"
@@ -43,8 +43,11 @@ echo " "
 
 PG_HOST=$(docker port postgres_local | awk -F"-> " '{ print $2 }' | awk -F: '{ print $1 }')
 PG_PORT=$(docker port postgres_local | awk -F"-> " '{ print $2 }' | awk -F: '{ print $2 }')
+MEDIA_ROOT=$(pwd)/persistant/media/
 
-export PG_HOST PG_PORT PG_PASS DEBUG
+mkdir -p MEDIA_ROOT
+
+export PG_HOST PG_PORT PG_PASS DEBUG MEDIA_ROOT
 
 SENTINAL=0
 while [ $SENTINAL = 0 ]; do
