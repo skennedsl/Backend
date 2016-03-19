@@ -2,7 +2,8 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from geoposition.fields import GeopositionField
 import os
-
+from django.db.models.signals import pre_delete
+from django.dispatch.dispatcher import receiver
 
 def validate_file_extension(value):
 	import os
@@ -69,14 +70,20 @@ class Media(models.Model):
 			pass  # when new photo then we do nothing, normal case
 		super(Media, self).save(*args, **kwargs)
 
-	def delete(self, *args, **kwargs):
-		# You have to prepare what you need before delete the model
-		storage, path = self.image.storage, self.image.path
-		storage2, path2 = self.voice_memo.storage, self.voice_memo.path
-		# Delete the model before the file
-		super(Media, self).delete(*args, **kwargs)
-		# Delete the file after the model
-		storage.delete(path)
-		storage2.delete(path2)
+	# def delete(self, *args, **kwargs):
+	# 	# You have to prepare what you need before delete the model
+	# 	storage, path = self.image.storage, self.image.path
+	# 	storage2, path2 = self.voice_memo.storage, self.voice_memo.path
+	# 	# Delete the model before the file
+	# 	super(Media, self).delete(*args, **kwargs)
+	# 	# Delete the file after the model
+	# 	storage.delete(path)
+	# 	storage2.delete(path2)
+
+@receiver(pre_delete, sender=Media)
+def media_delete(sender, instance, **kwargs):
+    # Pass false so FileField doesn't save the model.
+    instance.image.delete(False)
+    instance.voice_memo.delete(False)
 
 		

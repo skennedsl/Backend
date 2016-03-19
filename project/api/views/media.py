@@ -28,7 +28,20 @@ class ImageUpload(ViewRequestDispatcher):
 
 class VoiceUpload(ViewRequestDispatcher): 
     def post(self, request):
+        asset = Asset.objects.get(id=asset_id)
         response_data = {
-            'status': "success",
+            'status': "success"
         }
+
+        try:
+            current_media = Media.objects.get(asset=asset)
+            current_media.voice_memo = request.FILES['audio']
+            current_media.save()
+        except Media.DoesNotExist:
+            current_media = Media.objects.create(asset=asset)
+            current_media.voice_memo = request.FILES['audio']
+            current_media.save()
+        except:
+            response_data['status'] = "failed"
+        
         return HttpResponse(self.json_dump(request, response_data), content_type="application/json")

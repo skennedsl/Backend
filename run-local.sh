@@ -11,10 +11,6 @@ sudo pip install virtualenv || exit 1;
 virtualenv env
 source env/bin/activate
 
-if [ -d "persistant/postgresdata-$PG_VERSION" ]; then
-	DB_EXISTS=1
-fi
-
 echo " "
 echo "Installing requirements"
 # Files can have spaces. Force the virtualenv interpreter using quotes:

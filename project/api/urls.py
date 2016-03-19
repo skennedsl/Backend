@@ -27,5 +27,5 @@ urlpatterns = [
 
 	# Asset Media Management
 	url(r'^asset/media/image-upload/(?P<asset_id>[0-9A-Fa-f]*)/$', ImageUpload.as_view(), name="media-image-upload"),
-	# url(r'^asset/media/voice-upload/(?P<asset_id>[0-9A-Fa-f]*)/$', VoiceUpload.as_view(), name="media-voice-upload"),
+	url(r'^asset/media/voice-upload/(?P<asset_id>[0-9A-Fa-f]*)/$', VoiceUpload.as_view(), name="media-voice-upload"),
 ]
