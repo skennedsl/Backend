@@ -1,21 +1,31 @@
 from django.contrib import admin
 from django.db import models
-from models import Asset, Category, Media, Type, Location
+from models import Asset, Category, MediaImage, MediaVoiceMemo, Type, Location
 
-class MediaInline(admin.StackedInline):
+class MediaImageInline(admin.StackedInline):
     fieldsets = (
         (
             None,
             {
-                'fields': ('voice_memo', 'image', 'thumbnail')
+                'fields': ('image', 'thumbnail')
             }
         ),
     )
-
     readonly_fields = ('thumbnail',)
-    model = Media
+    model = MediaImage
     extra = 0
 
+class MediaVoiceMemoInline(admin.StackedInline):
+    fieldsets = (
+        (
+            None,
+            {
+                'fields': ('voice_memo',)
+            }
+        ),
+    )
+    model = MediaVoiceMemo
+    extra = 0
 
 class LocationInline(admin.StackedInline):
     model = Location
@@ -27,7 +37,7 @@ class AssetAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('name', 'description', 'category', 'asset_type')}),
     )
-    inlines = (MediaInline, LocationInline, )
+    inlines = (MediaImageInline, MediaVoiceMemoInline, LocationInline, )
 
 
 

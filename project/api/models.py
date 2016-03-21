@@ -50,10 +50,9 @@ class Location(models.Model):
 		return '%s' % self.position
 
 
-class Media(models.Model):
+class MediaImage(models.Model):
 	image = models.ImageField(upload_to='image_uploads/', null=True, blank=True)
 	asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
-	voice_memo = models.FileField(upload_to='voice_uploads/', help_text="Valid Extensions: .aac, .wav, .mp4, .m4a", validators=[validate_file_extension], null=True, blank=True)
 
 	def thumbnail(self):
 		return '<img width="200" src="%s"/>' % self.image.url
@@ -61,29 +60,36 @@ class Media(models.Model):
 	def save(self, *args, **kwargs):
 		# delete old file when replacing by updating the file
 		try:
-			this = Media.objects.get(id=self.id)
+			this = MediaImage.objects.get(id=self.id)
 			if this.image != self.image:
 				this.image.delete(save=False)
+		except:
+			pass  # when new photo then we do nothing, normal case
+		super(MediaImage, self).save(*args, **kwargs)
+
+class MediaVoiceMemo(models.Model):
+	asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
+	voice_memo = models.FileField(upload_to='voice_uploads/', help_text="Valid Extensions: .aac, .wav, .mp4, .m4a", validators=[validate_file_extension], null=True, blank=True)
+
+	def save(self, *args, **kwargs):
+		# delete old file when replacing by updating the file
+		try:
+			this = MediaVoiceMemo.objects.get(id=self.id)
 			if this.voice_memo != self.voice_memo:
 				this.voice_memo.delete(save=False)
 		except:
 			pass  # when new photo then we do nothing, normal case
-		super(Media, self).save(*args, **kwargs)
+		super(MediaVoiceMemo, self).save(*args, **kwargs)
 
-	# def delete(self, *args, **kwargs):
-	# 	# You have to prepare what you need before delete the model
-	# 	storage, path = self.image.storage, self.image.path
-	# 	storage2, path2 = self.voice_memo.storage, self.voice_memo.path
-	# 	# Delete the model before the file
-	# 	super(Media, self).delete(*args, **kwargs)
-	# 	# Delete the file after the model
-	# 	storage.delete(path)
-	# 	storage2.delete(path2)
 
-@receiver(pre_delete, sender=Media)
-def media_delete(sender, instance, **kwargs):
+@receiver(pre_delete, sender=MediaImage)
+def media_image_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.
     instance.image.delete(False)
+
+@receiver(pre_delete, sender=MediaVoiceMemo)
+def media_voice_delete(sender, instance, **kwargs):
+    # Pass false so FileField doesn't save the model.
     instance.voice_memo.delete(False)
 
 		

@@ -1,6 +1,6 @@
 import json
 from django.http import HttpResponse
-from api.models import Asset, Category, Media, Type, Location
+from api.models import Asset, Category, Type, Location
 from dispatcher import ViewRequestDispatcher
 from geoposition import Geoposition
 from api.common.errors import InvalidFieldException

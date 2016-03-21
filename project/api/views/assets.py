@@ -1,6 +1,6 @@
 import json
 from django.http import HttpResponse
-from api.models import Asset, Category, Media, Type, Location
+from api.models import Asset, Category, MediaImage, MediaVoiceMemo, Type, Location
 from dispatcher import ViewRequestDispatcher
 from geoposition import Geoposition
 from api.common.errors import InvalidFieldException
@@ -39,12 +39,15 @@ def assemble_asset_info(asset_obj):
         result['longitude'] = float(locations[0].position.longitude)
 
     # Get asset media
-    medias = Media.objects.filter(asset=asset_obj)
-    if len(medias) > 0:
-        if medias[0].image:
-            result['media-image-url'] = medias[0].image.url
-        if medias[0].voice_memo:
-            result['media-voice-url'] = medias[0].voice_memo.url
+    mediaImages = MediaImage.objects.filter(asset=asset_obj)
+    if len(mediaImages) > 0:
+        if mediaImages[0].image:
+            result['media-image-url'] = mediaImages[0].image.url
+
+    mediaMemos = MediaVoiceMemo.objects.filter(asset=asset_obj)
+    if len(mediaMemos) > 0:
+        if mediaMemos[0].voice_memo:
+            result['media-voice-url'] = mediaMemos[0].voice_memo.url
 
     return result
 

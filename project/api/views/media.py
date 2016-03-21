@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from dispatcher import ViewRequestDispatcher
-from api.models import Asset, Media
+from api.models import Asset, MediaImage, MediaVoiceMemo
 import sys
 from django.core.files.base import ContentFile
 
@@ -13,11 +13,11 @@ class ImageUpload(ViewRequestDispatcher):
         }
 
         try:
-            current_media = Media.objects.get(asset=asset)
+            current_media = MediaImage.objects.get(asset=asset)
             current_media.image = request.FILES['image']
             current_media.save()
-        except Media.DoesNotExist:
-            current_media = Media.objects.create(asset=asset)
+        except MediaImage.DoesNotExist:
+            current_media = MediaImage.objects.create(asset=asset)
             current_media.image = request.FILES['image']
             current_media.save()
         except:
@@ -27,18 +27,18 @@ class ImageUpload(ViewRequestDispatcher):
 
 
 class VoiceUpload(ViewRequestDispatcher): 
-    def post(self, request):
+    def post(self, request, asset_id):
         asset = Asset.objects.get(id=asset_id)
         response_data = {
             'status': "success"
         }
 
         try:
-            current_media = Media.objects.get(asset=asset)
+            current_media = MediaVoiceMemo.objects.get(asset=asset)
             current_media.voice_memo = request.FILES['audio']
             current_media.save()
-        except Media.DoesNotExist:
-            current_media = Media.objects.create(asset=asset)
+        except MediaVoiceMemo.DoesNotExist:
+            current_media = MediaVoiceMemo.objects.create(asset=asset)
             current_media.voice_memo = request.FILES['audio']
             current_media.save()
         except:
