@@ -56,6 +56,8 @@ To access, visit `http://localhost:8000`
 3. type:
 
 ```
+docker-compose build
+
 PG_PASS=somepass docker-compose up -d postgres
 
 # allow time for postgres to come up
