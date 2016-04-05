@@ -1,20 +1,20 @@
 postgres:
   image: postgres:9.5
   volumes:
-   - /persistent/postgresdata-9.5:/data
+    - /persistent/postgresdata-9.5:/data
   environment:
-   - POSTGRES_PASSWORD=${PG_PASS}
-   - PGDATA=/data/main
+    - POSTGRES_PASSWORD=${PG_PASS}
+    - PGDATA=/data/main
 django:
   build: .
   dockerfile: ./docker/django/Dockerfile
   ports:
-   - "80:80"
+    - "80:80"
   volumes:
-   - /persistent/djangomedia:/opt/Project/persistent/media
+    - /persistent/djangomedia:/opt/Project/persistent/media
   environment:
-   - PG_PASS=${PG_PASS}
-   - DEBUG=${DEBUG}
+    - PG_PASS=${PG_PASS}
+    - DEBUG=${DEBUG}
   links:
-   - postgres:postgres
+    - postgres:postgres
   restart: always

@@ -61,6 +61,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
+
 try:
     DB_HOST = os.environ['PG_HOST']
 except KeyError:
@@ -73,7 +74,7 @@ except KeyError:
 
 DB_NAME = 'postgres'
 DB_USER = 'postgres'
-DB_PASS = os.environ['PG_PASS']
+DB_PASS = os.environ.get('PG_PASS')
 
 DATABASES = {
     'default': {
@@ -85,6 +86,14 @@ DATABASES = {
         'PORT': DB_PORT,
     }
 }
+
+if os.environ.get('LOCAL') == '1':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/

@@ -3,3 +3,5 @@ persistant/*
 volatile/*
 env/*
 .idea
+*.sqlite3
+project/api/migrations/*

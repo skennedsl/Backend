@@ -3,6 +3,7 @@
 PG_PASS=somepass
 PG_VERSION=9.5
 DEBUG=1
+LOCAL=1
 DB_EXISTS=0
 
 echo " "
@@ -16,34 +17,11 @@ echo "Installing requirements"
 # Files can have spaces. Force the virtualenv interpreter using quotes:
 ./env/bin/python2.7 ./env/bin/pip install -r ./docker/django/requirements.txt || exit 1;
 
-echo " "
-echo "Removing previous local docker instances"
-docker stop postgres_local
-docker rm postgres_local
-
-echo " "
-echo "Starting Postgres"
-PG_REPO=postgres
-docker pull $PG_REPO:$PG_VERSION || exit 1;
-docker run -p 5432:5432 -e POSTGRES_PASSWORD=$PG_PASS -d --name postgres_local $PG_REPO:$PG_VERSION
-
-echo " "
-echo "Waiting for postgres to start (15 sec)"
-COUNTER=0
-while [  $COUNTER -lt 15 ]; do
-	printf "."
-	let COUNTER=COUNTER+1
-	sleep 1
-done
-echo " "
-
-PG_HOST=$(docker port postgres_local | awk -F"-> " '{ print $2 }' | awk -F: '{ print $1 }')
-PG_PORT=$(docker port postgres_local | awk -F"-> " '{ print $2 }' | awk -F: '{ print $2 }')
 MEDIA_ROOT=$(pwd)/persistant/media/
 
 mkdir -p MEDIA_ROOT
 
-export PG_HOST PG_PORT PG_PASS DEBUG MEDIA_ROOT
+export LOCAL DEBUG MEDIA_ROOT
 
 SENTINAL=0
 while [ $SENTINAL = 0 ]; do
@@ -52,11 +30,10 @@ while [ $SENTINAL = 0 ]; do
 	./env/bin/python2.7 ./project/manage.py makemigrations
 	./env/bin/python2.7 ./project/manage.py migrate
 
-	if [ $DB_EXISTS = 0 ]; then 
-		echo " "
-		echo "Create initial super user"
-		./env/bin/python2.7 ./project/manage.py createsuperuser	
-		DB_EXISTS=1
+	echo " "
+	read -r -p "Creating Super User? [y/N] " response
+	if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+		./env/bin/python2.7 ./project/manage.py createsuperuser
 	fi
 
 	./env/bin/python2.7 ./project/manage.py runserver 0.0.0.0:8000
@@ -69,11 +46,6 @@ while [ $SENTINAL = 0 ]; do
 	fi
 done
 
-#Clean up
-echo " "
-echo "Stopping Postgres"
-docker stop postgres_local
-docker rm postgres_local
 deactivate
 
 echo " "
@@ -82,10 +54,10 @@ if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
 then
 	sudo rm -rf env/
 fi
-read -r -p "Remove Postgres Data? [y/N] " response
+read -r -p "Remove Database? [y/N] " response
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
 then
-	sudo rm -rf persistant/
+	rm -rf ./project/db.sqlite3
 fi
 
 echo " "
