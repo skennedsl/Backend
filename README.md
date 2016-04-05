@@ -6,7 +6,7 @@ CircleCI - [![Circle CI](https://circleci.com/gh/ScribblesProject/Backend.svg?st
 
 - Python
 - pip
-- Docker
+- Docker (for server deployment)
 - Docker-compose (for server deployment)
 
 **Running Locally:**
