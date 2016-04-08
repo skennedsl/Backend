@@ -14,7 +14,7 @@ ssh $DEPLOY_USER@$DEPLOY_HOST "cd ~/Class/csc190/backend; docker-compose build;"
 
 echo " "
 echo "Docker-compose running postgres"
-ssh $DEPLOY_USER@$DEPLOY_HOST "PG_PASS=$DEPLOY_POSTGRES_PASS docker-compose up -d postgres"
+ssh $DEPLOY_USER@$DEPLOY_HOST "cd ~/Class/csc190/backend; PG_PASS=$DEPLOY_POSTGRES_PASS docker-compose up -d postgres"
 
 echo " "
 echo "Waiting to ensure postgres is ready... 15 sec"
@@ -22,5 +22,5 @@ sleep 15
 
 echo " "
 echo "Docker-compose running postgres"
-ssh $DEPLOY_USER@$DEPLOY_HOST "PG_PASS=$DEPLOY_POSTGRES_PASS docker-compose up -d django"
+ssh $DEPLOY_USER@$DEPLOY_HOST "cd ~/Class/csc190/backend; PG_PASS=$DEPLOY_POSTGRES_PASS docker-compose up -d django"
 
