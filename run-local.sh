@@ -6,6 +6,9 @@ DEBUG=1
 LOCAL=1
 DB_EXISTS=0
 
+sudo apt-get update
+sudo apt-get install libpq-dev python-dev python-pip build-essential libjpeg-dev
+
 echo " "
 echo "Setting up a virtual pip environment"
 sudo pip install virtualenv || exit 1;

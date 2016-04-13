@@ -2,4 +2,4 @@ Django==1.8
 requests
 psycopg2
 Pillow
-git+https://github.com/matiboy/django-geoposition.git@center_to_current_location
+django-geoposition
