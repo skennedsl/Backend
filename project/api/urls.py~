@@ -2,7 +2,7 @@ from django.conf.urls import include, url
 from views.status import Status as ServiceStatus
 from views.assets import AssetList, AssetFetch, AssetUpdate, AssetDelete, AssetCreate
 from views.type import TypeList
-from views.category import CategoryList, CategoryDelete
+from views.category import CategoryList
 from views.media import ImageUpload, VoiceUpload
 
 urlpatterns = [
@@ -17,7 +17,7 @@ urlpatterns = [
 
 	# Asset-Category Management
 	url(r'^asset/category/list/$', CategoryList.as_view(), name="categ-list"),
-	url(r'^asset/category/delete/(?P<categ_id>[0-9A-Fa-f]*)/$', CategoryDelete.as_view(), name="categ-delete"),	
+	# url(r'^asset/category/delete/(?P<categ_id>[0-9A-Fa-f]*)/$', ServiceStatus.as_view(), name="categ-delete"),	
 	# url(r'^asset/category/update/(?P<categ_id>[0-9A-Fa-f]*)/$', ServiceStatus.as_view(), name="categ-update"),	
 
 	# Asset-Type Management
